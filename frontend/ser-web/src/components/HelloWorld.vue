@@ -10,6 +10,17 @@
     <div>
       <b-button v-on:click="submitFile()">Submit</b-button>
     </div>
+    <div>
+      <b-card
+        title="Emotion"
+        class="mb-2"
+      >
+        <b-card-text>
+          The algorithm predicts you are: {{this.emotion}}
+        </b-card-text>
+
+      </b-card>
+    </div>
   </div>
 </template>
 
@@ -24,6 +35,7 @@ export default class HelloWorld extends Vue {
   file: File = new File([""], "");
   apiResponse = "";
   showAlert = false;
+  emotion = "";
 
   handleFileUpload(event: Event): void{
     const target = event.target as HTMLInputElement
@@ -43,6 +55,7 @@ export default class HelloWorld extends Vue {
     formData.append('file', this.file);
     const response = await axios.post(`http://localhost:5000/file`, formData).then((response) => {
       console.log(response);
+      this.emotion = response.data;
     })
   }
 
