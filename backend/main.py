@@ -51,6 +51,7 @@ emotions = {
     '08': 'surprised'
 }
 
+
 # Emotions to observe
 # observed_emotions = ['angry']
 
@@ -92,10 +93,9 @@ def load_train_data():
     return np.array(x), y
 
 
-def load_test_data():
+def load_test_data(path: str):
     x, y = [], []
-    for file in glob.glob(
-            "C:\\University\\3rd year\\3rd Year Project\\SpeechEmotionRec\\interview_recordings\\Actor_*\\*.wav"):
+    for file in glob.glob(path):
         emotion_basename = os.path.basename(file)
         emotion = emotions[os.path.splitext(emotion_basename)[0]]
 
@@ -136,16 +136,28 @@ def load_test_data():
 #             except:
 #                 print("ERROR CONVERTING " + str(filepath))
 
+def analyse_file(path: str) -> list:
+    x_train, y_train = load_train_data()
+    x_test, y_test = load_test_data(path)
+    model = MLPClassifier(alpha=0.0001, batch_size=100, epsilon=1e-08, hidden_layer_sizes=15,
+                          solver='adam', max_iter=500, activation='logistic')
+    model.fit(x_train, y_train)
+    y_pred = model.predict(x_test)
+    return y_pred
+
 
 def main():
     x_train, y_train = load_train_data()
-    x_test, y_test = load_test_data()
+    x_test, y_test = load_test_data("C:\\University\\3rd year\\3rd Year "
+                                    "Project\\SpeechEmotionRec\\interview_recordings\\Actor_*\\*.wav")
 
     # Initialize the Multi Layer Perceptron Classifier
     model = MLPClassifier(alpha=0.0001, batch_size=100, epsilon=1e-08, hidden_layer_sizes=15,
                           solver='adam', max_iter=500, activation='logistic')
 
+    # Train
     model.fit(x_train, y_train)
+    # Test
     y_pred = model.predict(x_test)
     print(y_pred)
 
@@ -157,11 +169,6 @@ def main():
     #               'alpha': [0.0001],
     #               'batch_size': [100]
     #               }
-
-    # Train the model
-    model.fit(x_train, y_train)
-    # Predict for the test set
-    y_pred = model.predict(x_test)
 
     # clf = GridSearchCV(MLPClassifier(), parameters, n_jobs=-1)
     # clf.fit(x_train, y_train)
