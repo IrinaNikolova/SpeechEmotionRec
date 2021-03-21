@@ -1,8 +1,13 @@
 <template>
   <div id="app">
+    <b-navbar type="dark" variant="info">
+      <b-navbar-nav>
+        <b-navbar-brand >SER Website</b-navbar-brand>
+      </b-navbar-nav>
+    </b-navbar>
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <!--<router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link>-->
     </div>
     <router-view/>
   </div>
